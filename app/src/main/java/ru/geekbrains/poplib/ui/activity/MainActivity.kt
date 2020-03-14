@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private lateinit var etSomeText: TextInputEditText
 
-    private val IS_STARTED = "IS_STARTED"
+    private val COUNTER = "COUNTER"
+    private val TEXT = "TEXT"
 
     private val counterPresenter = CounterPresenter(this, CounterModel())
     private val textPresenter = TextPresenter(this, TextModel())
@@ -31,22 +32,24 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private fun initView() {
         btn_counter.setOnClickListener() { counterPresenter.counterClick() }
-        etSomeText  = this.findViewById<TextInputEditText>(R.id.et_some_text)
+        etSomeText  = this.findViewById(R.id.et_some_text)
         btn_text.setOnClickListener() { textPresenter.changeText(etSomeText.text.toString()) }
         btn_math.setOnClickListener() { counterPresenter.calculate() }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(IS_STARTED, true)
+        outState.putInt(COUNTER, counterPresenter.getCounter())
+        outState.putString(TEXT, textPresenter.getText())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        if (savedInstanceState.getBoolean(IS_STARTED)) {
-            counterPresenter.updateCounter()
-            textPresenter.updateText()
-        }
+        val counter = savedInstanceState.getInt(COUNTER, 0)
+
+        counterPresenter.changeCounter(counter)
+        val someText = savedInstanceState.getString(TEXT, "")
+        textPresenter.changeText(someText)
     }
 
     override fun updateCounter(text: String) {

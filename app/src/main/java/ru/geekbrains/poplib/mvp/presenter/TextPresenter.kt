@@ -10,7 +10,5 @@ class TextPresenter(private val view: MainView, private val textModel: TextModel
         view.updateText(text)
     }
 
-    fun updateText() {
-        view.updateText(textModel.someText)
-    }
+    fun getText() = textModel.someText
 }

@@ -9,8 +9,11 @@ class CounterPresenter(private val view: MainView, private val counterModel: Cou
         view.updateCounter( counterModel.nextValue().toString())
     }
 
-    fun updateCounter() {
-        view.updateCounter(counterModel.getValue().toString())
+    fun getCounter() = counterModel.getValue()
+
+    fun changeCounter(counter: Int) {
+        counterModel.setValue(counter)
+        view.updateCounter(counter.toString())
     }
 
     fun calculate() {
