@@ -1,5 +1,7 @@
 package ru.geekbrains.poplib.mvp.presenter
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.geekbrains.poplib.mvp.model.entity.GithubRepository
@@ -45,7 +47,10 @@ class RepositoriesPresenter(private val repositoriesRepo: GithubRepositoriesRepo
         repositoryListPresenter.repositories.clear()
         viewState.clearError()
 
-        repositoriesRepo.getRepos().subscribe(
+        repositoriesRepo.getRepos()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
             {repos ->
                 repositoryListPresenter.repositories.add(repos)
                 viewState.updateList()
