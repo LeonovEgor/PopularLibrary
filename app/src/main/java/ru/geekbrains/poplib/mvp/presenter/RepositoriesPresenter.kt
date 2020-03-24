@@ -36,8 +36,7 @@ class RepositoriesPresenter(private val repositoriesRepo: GithubRepositoriesRepo
         repositoryListPresenter.itemClickListener = { itemView ->
             val repository = repositoryListPresenter.repositories[itemView.pos]
 
-            //Практическое задание
-            router.replaceScreen(Screens.RepositoryScreen(repository))
+            router.navigateTo(Screens.RepositoryScreen(repository))
         }
     }
 

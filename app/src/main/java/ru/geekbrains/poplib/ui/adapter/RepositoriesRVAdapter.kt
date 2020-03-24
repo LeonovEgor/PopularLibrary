@@ -23,14 +23,11 @@ class RepositoriesRVAdapter(val presenter: IRepositoryListPresenter) : RecyclerV
         presenter.bindView(holder)
     }
 
-
     class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer, RepositoryItemView {
         override var pos = -1
 
         override fun setTitle(text: String) = with(containerView) {
             tv_title.text = text
         }
-
     }
-
 }

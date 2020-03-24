@@ -7,4 +7,7 @@ import moxy.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface DetailView : MvpView {
     fun init()
+    fun setId(text: String)
+    fun setTitle(text: String)
+    fun setForksCount(text: String)
 }

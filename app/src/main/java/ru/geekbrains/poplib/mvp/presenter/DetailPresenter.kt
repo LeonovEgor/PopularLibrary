@@ -14,10 +14,13 @@ class DetailPresenter(private val repository: GithubRepository, private val rout
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
+        viewState.setId(repository.id)
+        viewState.setTitle(repository.name)
+        viewState.setForksCount(repository.forksCount.toString())
     }
 
     fun backClicked() : Boolean {
-        router.replaceScreen(Screens.RepositoriesScreen())
+        router.exit()
         return true
     }
 }
