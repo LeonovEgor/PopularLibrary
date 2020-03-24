@@ -8,4 +8,6 @@ import moxy.viewstate.strategy.StateStrategyType
 interface RepositoriesView : MvpView {
     fun init()
     fun updateList()
+    fun setError(message: String)
+    fun clearError()
 }

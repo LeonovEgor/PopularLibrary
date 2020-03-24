@@ -44,5 +44,16 @@ class RepositoriesFragment : MvpAppCompatFragment(), RepositoriesView, BackButto
         adapter?.notifyDataSetChanged()
     }
 
+    override fun setError(message: String) {
+        tv_error.visibility = View.VISIBLE
+        tv_error.text = message
+    }
+
+    override fun clearError() {
+        tv_error.text = ""
+        tv_error.visibility = View.GONE
+    }
+
+
     override fun backClicked() = presenter.backClicked()
 }

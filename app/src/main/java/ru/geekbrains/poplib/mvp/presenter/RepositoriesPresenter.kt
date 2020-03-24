@@ -9,6 +9,7 @@ import ru.geekbrains.poplib.mvp.view.RepositoriesView
 import ru.geekbrains.poplib.mvp.view.list.RepositoryItemView
 import ru.geekbrains.poplib.navigation.Screens
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 @InjectViewState
 class RepositoriesPresenter(private val repositoriesRepo: GithubRepositoriesRepo,
@@ -41,11 +42,19 @@ class RepositoriesPresenter(private val repositoriesRepo: GithubRepositoriesRepo
     }
 
     private fun loadRepos() {
-        repositoriesRepo.getRepos().let { repos ->
-            repositoryListPresenter.repositories.clear()
-            repositoryListPresenter.repositories.addAll(repos)
-            viewState.updateList()
-        }
+        repositoryListPresenter.repositories.clear()
+        viewState.clearError()
+
+        repositoriesRepo.getRepos().subscribe(
+            {repos ->
+                repositoryListPresenter.repositories.add(repos)
+                viewState.updateList()
+            },
+            {error ->
+                Timber.e(error)
+                viewState.setError(error.message.toString())
+            }
+        )
     }
 
     fun backClicked() : Boolean {
