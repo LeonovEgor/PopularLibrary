@@ -1,6 +1,7 @@
 package ru.geekbrains.poplib.ui
 
 import android.app.Application
+import ru.geekbrains.poplib.eventbus.Test
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
@@ -19,6 +20,9 @@ class App : Application() {
         instance = this
 
         Timber.plant(Timber.DebugTree())
+        //BusEvent test
+        val test = Test()
+        test.exec()
     }
 
     val navigatorHolder get() = cicerone.navigatorHolder
