@@ -1,7 +1,7 @@
 package ru.geekbrains.poplib.ui
 
 import android.app.Application
-import ru.geekbrains.poplib.eventbus.Test
+import ru.geekbrains.poplib.task2.Test
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
