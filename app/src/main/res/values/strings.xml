@@ -6,4 +6,9 @@
     <string name="id">Id репозитория</string>
     <string name="rep_name">Имя репозитория</string>
     <string name="fork">Fork</string>
+    <string name="user">user</string>
+    <string name="user_id">user_id</string>
+    <string name="user_name">user_name</string>
+    <string name="user_login">user_login</string>
+    <string name="user_repos">45</string>
 </resources>
