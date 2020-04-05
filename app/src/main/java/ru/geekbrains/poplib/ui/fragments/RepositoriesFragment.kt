@@ -20,6 +20,7 @@ import ru.geekbrains.poplib.ui.App
 import ru.geekbrains.poplib.ui.BackButtonListener
 import ru.geekbrains.poplib.ui.adapter.RepositoriesRVAdapter
 import ru.geekbrains.poplib.ui.image.GlideImageLoader
+import ru.geekbrains.poplib.ui.network.NetworkStatus
 
 class RepositoriesFragment : MvpAppCompatFragment(), RepositoriesView, BackButtonListener {
 
@@ -31,6 +32,8 @@ class RepositoriesFragment : MvpAppCompatFragment(), RepositoriesView, BackButto
     lateinit var presenter: RepositoriesPresenter
 
     private var adapter: RepositoriesRVAdapter? = null
+
+    val networkStatus = NetworkStatus(App.instance)
 
     val imageLoader by lazy { GlideImageLoader() }
 
