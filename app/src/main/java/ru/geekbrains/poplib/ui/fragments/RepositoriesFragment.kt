@@ -12,8 +12,11 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.geekbrains.poplib.R
 import ru.geekbrains.poplib.mvp.model.api.ApiHolder
+import ru.geekbrains.poplib.mvp.model.entity.room.db.AppDatabase
 import ru.geekbrains.poplib.mvp.model.repo.GithubRepositoriesRepo
 import ru.geekbrains.poplib.mvp.model.repo.GithubUsersRepo
+import ru.geekbrains.poplib.mvp.model.repo.RepositoriesCache
+import ru.geekbrains.poplib.mvp.model.repo.UserCache
 import ru.geekbrains.poplib.mvp.presenter.RepositoriesPresenter
 import ru.geekbrains.poplib.mvp.view.RepositoriesView
 import ru.geekbrains.poplib.ui.App
@@ -33,19 +36,31 @@ class RepositoriesFragment : MvpAppCompatFragment(), RepositoriesView, BackButto
 
     private var adapter: RepositoriesRVAdapter? = null
 
-    val networkStatus = NetworkStatus(App.instance)
+    private val networkStatus = NetworkStatus(App.instance)
 
-    val imageLoader by lazy { GlideImageLoader() }
+    private val imageLoader by lazy { GlideImageLoader() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
         View.inflate(context, R.layout.fragment_repositories, null)
 
     @ProvidePresenter
     fun providePresenter() = RepositoriesPresenter(
         AndroidSchedulers.mainThread(),
         App.instance.router,
-        GithubRepositoriesRepo(ApiHolder.api),
-        GithubUsersRepo(ApiHolder.api) )
+        GithubRepositoriesRepo(
+            ApiHolder.api,
+            networkStatus,
+            RepositoriesCache(AppDatabase.getInstance())
+        ),
+        GithubUsersRepo(
+            ApiHolder.api,
+            networkStatus,
+            UserCache(AppDatabase.getInstance()))
+    )
 
     override fun init() {
         rv_repos.layoutManager = LinearLayoutManager(context)

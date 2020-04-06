@@ -21,14 +21,22 @@ class UserCache(private val database: AppDatabase) : IUserCache {
     }
 
     override fun getUserByLogin(login: String): Single<GithubUser> =
-        database.userDao.getUserByLogin(login).map { roomUser ->
-            GithubUser(
-                roomUser.id,
-                roomUser.login,
-                roomUser.name,
-                roomUser.avatarUrl,
-                roomUser.reposUrl,
-                roomUser.publicRepos
-            )
+
+        Single.create { emitter ->
+            database.userDao.getUserByLogin(login)?.let { roomUser ->
+                emitter.onSuccess(
+                    GithubUser(
+                        roomUser.id,
+                        roomUser.login,
+                        roomUser.name,
+                        roomUser.avatarUrl,
+                        roomUser.reposUrl,
+                        roomUser.publicRepos
+                    )
+                )
+            } ?: let {
+                emitter.onError(RuntimeException("No such user in cache"))
+            }
         }
+
 }

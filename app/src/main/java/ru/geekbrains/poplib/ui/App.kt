@@ -1,7 +1,7 @@
 package ru.geekbrains.poplib.ui
 
 import android.app.Application
-import ru.geekbrains.poplib.task2.Test
+import ru.geekbrains.poplib.mvp.model.entity.room.db.AppDatabase
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
@@ -20,9 +20,13 @@ class App : Application() {
         instance = this
 
         Timber.plant(Timber.DebugTree())
+        AppDatabase.create(this)
+
+        //region BusEvent Task
         //BusEvent test
-        val test = Test()
-        test.exec()
+        //val test = Test()
+        //test.exec()
+        //endregion
     }
 
     val navigatorHolder get() = cicerone.navigatorHolder

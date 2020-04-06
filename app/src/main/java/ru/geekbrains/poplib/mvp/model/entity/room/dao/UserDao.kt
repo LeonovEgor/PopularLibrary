@@ -1,7 +1,6 @@
 package ru.geekbrains.poplib.mvp.model.entity.room.dao
 
 import androidx.room.*
-import io.reactivex.rxjava3.core.Single
 import ru.geekbrains.poplib.mvp.model.entity.room.RoomGithubUser
 
 @Dao
@@ -10,10 +9,10 @@ interface UserDao {
     //region Select
 
     @Query("SELECT * FROM RoomGithubUser")
-    fun getAll(): Single<List<RoomGithubUser>>
+    fun getAll(): List<RoomGithubUser>
 
-    @Query("SELECT * FROM RoomGithubUser WHERE RoomGithubUser.login = :login LIMIT 1")
-    fun getUserByLogin(login: String): Single<RoomGithubUser>  //Можно использовать Maybe
+    @Query("SELECT * FROM RoomGithubUser WHERE login = :login LIMIT 1")
+    fun getUserByLogin(login: String): RoomGithubUser?
 
     //endregion Select
 
@@ -23,12 +22,25 @@ interface UserDao {
     fun insert(user: RoomGithubUser)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg users: RoomGithubUser)
+    fun insert(vararg users: RoomGithubUser)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(users: RoomGithubUser)
+    fun insert(users: List<RoomGithubUser>)
 
     //endregion Insert
+
+    //region Update
+
+    @Update
+    fun update(user: RoomGithubUser)
+
+    @Update
+    fun update(vararg user: RoomGithubUser)
+
+    @Update
+    fun update(users: List<RoomGithubUser>)
+
+    //endregion Update
 
     //region Delete
 
@@ -37,6 +49,9 @@ interface UserDao {
 
     @Delete
     fun delete(vararg user: RoomGithubUser)
+
+    @Delete
+    fun delete(users: List<RoomGithubUser>)
 
     //endregion Delete
 

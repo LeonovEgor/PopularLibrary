@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import ru.geekbrains.poplib.mvp.model.entity.room.MIGRATION_1_2
 import ru.geekbrains.poplib.mvp.model.entity.room.RoomGithubRepository
 import ru.geekbrains.poplib.mvp.model.entity.room.RoomGithubUser
 import ru.geekbrains.poplib.mvp.model.entity.room.dao.RepositoryDao
@@ -13,7 +14,7 @@ import ru.geekbrains.poplib.mvp.model.entity.room.dao.UserDao
     entities = [
         RoomGithubUser::class,
         RoomGithubRepository::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract val userDao: UserDao
@@ -33,7 +34,9 @@ abstract class AppDatabase : RoomDatabase() {
                 instance = Room.databaseBuilder(
                     context,
                     AppDatabase::class.java, DB_NAME
-                ).build()
+                )
+                    .addMigrations(MIGRATION_1_2)
+                    .build()
             }
     }
 }

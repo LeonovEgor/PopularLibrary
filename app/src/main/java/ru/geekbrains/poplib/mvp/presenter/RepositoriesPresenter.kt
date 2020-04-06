@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.geekbrains.poplib.mvp.model.entity.GithubRepository
+import ru.geekbrains.poplib.mvp.model.entity.GithubUser
 import ru.geekbrains.poplib.mvp.model.repo.GithubRepositoriesRepo
 import ru.geekbrains.poplib.mvp.model.repo.GithubUsersRepo
 import ru.geekbrains.poplib.mvp.presenter.list.IRepositoryListPresenter
@@ -63,17 +64,17 @@ class RepositoriesPresenter(
                 viewState.loadAvatar(user.avatarUrl)
                 viewState.setUserReposCount(user.publicRepos.toString())
 
-                loadRepos(user.reposUrl)
+                loadRepos(user)
             }, {
                 Timber.e(it)
                 viewState.showError(it.toString())
             })
     }
 
-    private fun loadRepos(reposUrl: String) {
+    private fun loadRepos(user: GithubUser) {
         viewState.clearError()
 
-        repositoriesRepo.getUserRepos(reposUrl)
+        repositoriesRepo.getUserRepos(user)
             .observeOn(mainThreadScheduler)
             .subscribe( {repos ->
                 repositoryListPresenter.repositories.clear()
