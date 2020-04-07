@@ -49,18 +49,9 @@ class RepositoriesFragment : MvpAppCompatFragment(), RepositoriesView, BackButto
 
     @ProvidePresenter
     fun providePresenter() = RepositoriesPresenter(
-        AndroidSchedulers.mainThread(),
-        App.instance.router,
-        GithubRepositoriesRepo(
-            ApiHolder.api,
-            networkStatus,
-            RepositoriesCache(AppDatabase.getInstance())
-        ),
-        GithubUsersRepo(
-            ApiHolder.api,
-            networkStatus,
-            UserCache(AppDatabase.getInstance()))
-    )
+        AndroidSchedulers.mainThread()).apply {
+        App.instance.appComponent.inject(this)
+    }
 
     override fun init() {
         rv_repos.layoutManager = LinearLayoutManager(context)

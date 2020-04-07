@@ -21,7 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val repositoryDao: RepositoryDao
 
     companion object {
-        private const val DB_NAME = "database.db"
+        const val DB_NAME = "database.db"
 
         @Volatile
         private var instance: AppDatabase? = null

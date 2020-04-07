@@ -13,14 +13,10 @@ import ru.geekbrains.poplib.mvp.view.list.RepositoryItemView
 import ru.geekbrains.poplib.navigation.Screens
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
+import javax.inject.Inject
 
 @InjectViewState
-class RepositoriesPresenter(
-
-    private val mainThreadScheduler: Scheduler,
-    private val router: Router,
-    private val repositoriesRepo: GithubRepositoriesRepo,
-    private val userRepo: GithubUsersRepo)
+class RepositoriesPresenter(private val mainThreadScheduler: Scheduler)
     : MvpPresenter<RepositoriesView>() {
 
 
@@ -37,6 +33,12 @@ class RepositoriesPresenter(
     }
 
     private val userName: String = "googlesamples"
+    @Inject
+    private lateinit var userRepo: GithubUsersRepo
+    @Inject
+    private lateinit var repositoriesRepo: GithubRepositoriesRepo
+    @Inject
+    lateinit var router: Router
 
     val repositoryListPresenter = RepositoryListPresenter()
 
