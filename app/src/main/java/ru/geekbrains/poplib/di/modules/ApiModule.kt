@@ -8,32 +8,34 @@ import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.geekbrains.poplib.ui.App
-import ru.geekbrains.poplib.ui.network.NetworkStatus
+import ru.geekbrains.poplib.mvp.model.api.IDataSource
 import javax.inject.Named
 
-@Module
+@Module(includes = [NetworkStatusModule::class])
 class ApiModule {
 
     @Named("baseUrl")
     @Provides
-    fun baseUrl() = "https://api.github.com"
+    fun baseUrl(): String {
+        return "https://api.github.com"
+    }
 
     @Provides
-    fun networkStatus(app: App) = NetworkStatus(app)
+    fun gson(): Gson {
+        return GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .excludeFieldsWithoutExposeAnnotation()
+            .create()
+    }
 
     @Provides
-    fun gson() = GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .excludeFieldsWithoutExposeAnnotation()
-        .create()
-
-    @Provides
-    fun api(@Named("baseUrl") baseUrl: String, gson: Gson) =
-        Retrofit.Builder()
+    fun api(@Named("baseUrl") baseUrl: String, gson: Gson): IDataSource {
+        return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
+            .create(IDataSource::class.java)
+    }
 
 }

@@ -16,16 +16,14 @@ class GithubRepositoriesRepo(
 ) {
 
     fun getUserRepos(user: GithubUser): @NonNull Single<List<GithubRepository>> =
-        networkStatus.isOnlineSingle()
-            .flatMap { isOnline ->
-                if (isOnline) {
-                    api.getRepos(user.reposUrl)
-                        .map { userRepos ->
-                            cache.insertOrReplace(user.login, userRepos)
-                            userRepos
-                        }
-                } else {
-                    cache.getRepositories(user.login)
-                }.subscribeOn(Schedulers.io())
+        networkStatus.isOnlineSingle().flatMap { isOnline ->
+            if (isOnline) {
+                api.getRepos(user.reposUrl)
+                    .flatMap { userRepos ->
+                        cache.insertOrReplace(user.login, userRepos).toSingleDefault(userRepos)
+                    }
+            } else {
+                cache.getRepositories(user.login)
             }
+        }.subscribeOn(Schedulers.io())
 }

@@ -30,8 +30,8 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     @ProvidePresenter
-    fun providePresenter() = MainPresenter().apply { preseneter ->
-        App.instance.appComponent.inject(preseneter)
+    fun providePresenter() = MainPresenter().apply {
+        App.instance.appComponent.inject(this)
     }
 
     override fun init() {

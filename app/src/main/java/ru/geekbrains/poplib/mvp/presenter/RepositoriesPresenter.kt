@@ -4,7 +4,6 @@ import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.geekbrains.poplib.mvp.model.entity.GithubRepository
-import ru.geekbrains.poplib.mvp.model.entity.GithubUser
 import ru.geekbrains.poplib.mvp.model.repo.GithubRepositoriesRepo
 import ru.geekbrains.poplib.mvp.model.repo.GithubUsersRepo
 import ru.geekbrains.poplib.mvp.presenter.list.IRepositoryListPresenter
@@ -34,9 +33,9 @@ class RepositoriesPresenter(private val mainThreadScheduler: Scheduler)
 
     private val userName: String = "googlesamples"
     @Inject
-    private lateinit var userRepo: GithubUsersRepo
+    lateinit var userRepo: GithubUsersRepo
     @Inject
-    private lateinit var repositoriesRepo: GithubRepositoriesRepo
+    lateinit var repositoriesRepo: GithubRepositoriesRepo
     @Inject
     lateinit var router: Router
 
@@ -59,35 +58,25 @@ class RepositoriesPresenter(private val mainThreadScheduler: Scheduler)
 
         userRepo.getUser(userName)
             .observeOn(mainThreadScheduler)
-            .subscribe({user ->
+            .flatMap { user ->
                 viewState.setUserId("( ${user.id} )")
                 viewState.setUserLogin(user.login)
                 viewState.setUserName(user.name)
                 viewState.loadAvatar(user.avatarUrl)
                 viewState.setUserReposCount(user.publicRepos.toString())
+                return@flatMap repositoriesRepo.getUserRepos(user)
+            }
+            .observeOn(mainThreadScheduler)
+            .subscribe({ repos ->
+                viewState.clearError()
+                repositoryListPresenter.repositories.clear()
+                repositoryListPresenter.repositories.addAll(repos)
+                viewState.updateList()
 
-                loadRepos(user)
             }, {
                 Timber.e(it)
                 viewState.showError(it.toString())
             })
-    }
-
-    private fun loadRepos(user: GithubUser) {
-        viewState.clearError()
-
-        repositoriesRepo.getUserRepos(user)
-            .observeOn(mainThreadScheduler)
-            .subscribe( {repos ->
-                repositoryListPresenter.repositories.clear()
-                repositoryListPresenter.repositories.addAll(repos)
-                viewState.updateList()
-            },
-            {error ->
-                Timber.e(error)
-                viewState.showError(error.message.toString())
-            }
-        )
     }
 
     fun backClicked() : Boolean {

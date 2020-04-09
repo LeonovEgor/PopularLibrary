@@ -5,20 +5,25 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.geekbrains.poplib.mvp.model.entity.room.MIGRATION_1_2
+import ru.geekbrains.poplib.mvp.model.entity.room.RoomCachedImage
 import ru.geekbrains.poplib.mvp.model.entity.room.RoomGithubRepository
 import ru.geekbrains.poplib.mvp.model.entity.room.RoomGithubUser
+import ru.geekbrains.poplib.mvp.model.entity.room.dao.ImageDao
 import ru.geekbrains.poplib.mvp.model.entity.room.dao.RepositoryDao
 import ru.geekbrains.poplib.mvp.model.entity.room.dao.UserDao
 
 @Database(
     entities = [
         RoomGithubUser::class,
-        RoomGithubRepository::class],
-    version = 2
+        RoomGithubRepository::class,
+        RoomCachedImage::class],
+    version = 3,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val repositoryDao: RepositoryDao
+    abstract val imageDao: ImageDao
 
     companion object {
         const val DB_NAME = "database.db"

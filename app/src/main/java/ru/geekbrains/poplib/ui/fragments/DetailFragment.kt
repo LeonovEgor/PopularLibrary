@@ -34,7 +34,9 @@ class DetailFragment : MvpAppCompatFragment(), DetailView, BackButtonListener {
         View.inflate(context, R.layout.fragment_details, null)
 
     @ProvidePresenter
-    fun providePresenter() = DetailPresenter(arguments!![DETAIL_KEY] as GithubRepository, App.instance.router)
+    fun providePresenter() = DetailPresenter(arguments!![DETAIL_KEY] as GithubRepository).apply {
+        App.instance.appComponent.inject(this)
+    }
 
     override fun backClicked() = presenter.backClicked()
 

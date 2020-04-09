@@ -2,13 +2,12 @@ package ru.geekbrains.poplib.ui
 
 import android.app.Application
 import ru.geekbrains.poplib.di.AppComponent
+import ru.geekbrains.poplib.di.DaggerAppComponent
 import ru.geekbrains.poplib.di.modules.AppModule
-import ru.geekbrains.poplib.mvp.model.entity.room.db.AppDatabase
-import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 class App : Application() {
+
     companion object {
         lateinit var instance: App
     }
@@ -16,16 +15,11 @@ class App : Application() {
     lateinit var appComponent: AppComponent
         private set
 
-//    private val cicerone: Cicerone<Router> by lazy {
-//        Cicerone.create()
-//    }
-
     override fun onCreate() {
         super.onCreate()
         instance = this
 
         Timber.plant(Timber.DebugTree())
-        //AppDatabase.create(this)
 
         appComponent = DaggerAppComponent.builder()
             .appModule(AppModule(this))
@@ -38,6 +32,4 @@ class App : Application() {
         //endregion
     }
 
-//    val navigatorHolder get() = cicerone.navigatorHolder
-//    val router get() = cicerone.router
 }

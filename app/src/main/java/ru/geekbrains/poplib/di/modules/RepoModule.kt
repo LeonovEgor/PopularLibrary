@@ -10,7 +10,12 @@ import ru.geekbrains.poplib.mvp.model.repo.GithubUsersRepo
 import ru.geekbrains.poplib.ui.network.NetworkStatus
 import javax.inject.Singleton
 
-@Module(includes = [CacheModule::class, ApiModule::class])
+@Module(
+    includes = [
+        CacheModule::class,
+        ApiModule::class
+    ]
+)
 class RepoModule {
 
     @Singleton
@@ -19,7 +24,9 @@ class RepoModule {
         api: IDataSource,
         networkStatus: NetworkStatus,
         cache: IUserCache
-    ) = GithubUsersRepo(api, networkStatus, cache)
+    ): GithubUsersRepo {
+        return GithubUsersRepo(api, networkStatus, cache)
+    }
 
     @Singleton
     @Provides
@@ -27,6 +34,8 @@ class RepoModule {
         api: IDataSource,
         networkStatus: NetworkStatus,
         cache: IRepositoriesCache
-    ) = GithubRepositoriesRepo(api, networkStatus, cache)
+    ): GithubRepositoriesRepo {
+        return GithubRepositoriesRepo(api, networkStatus, cache)
+    }
 
 }
